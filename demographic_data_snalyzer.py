@@ -22,8 +22,8 @@ def calculate_demographic_data(print_data=True):
     lower_education = df[~df['education'].isin(['Bachelors', 'Masters', 'Doctorate'])]
 
     # percentage with salary >50K
-    higher_education_rich = round((higher_education['salary'] == '>50k').mean() * 100, 1)
-    lower_education_rich = round((lower_education['salary'] == '>50k').mean() * 100, 1)
+    higher_education_rich = round((higher_education['salary'] == '>50K').mean() * 100, 1)
+    lower_education_rich = round((lower_education['salary'] == '>50K').mean() * 100, 1)
 
     # What is the minimum number of hours a person works per week (hours-per-week feature)?
     min_work_hours = df['hours-per-week'].min()
@@ -31,17 +31,18 @@ def calculate_demographic_data(print_data=True):
     # What percentage of the people who work the minimum number of hours per week have a salary of >50K?
     num_min_workers = df[df['hours-per-week'] == min_work_hours]
 
-    rich_percentage = round((num_min_workers['salary'] == '>50k').mean() * 100, 1)
+    rich_percentage = round((num_min_workers['salary'] == '>50K').mean() * 100, 1)
 
     # What country has the highest percentage of people that earn >50K?
-    country_count = df['native-country'].value_counts()
-    rich_by_country = df[df['salary'] == '>50k']['native-country'].value_counts()
-    country_rich_percentage = (rich_by_country / country_count * 100).round(1)
-    highest_earning_country = country_rich_percentage.idmax()
-    highest_earning_country_percentage = country_rich_percentage.max()
+    rich_by_country = df[df['salary'] == '>50K']['native-country'].value_counts()
+    total_by_country = df['native-country'].value_counts()
+    percent_rich_country = (rich_by_country / total_by_country * 100).dropna()
+
+    highest_earning_country = percent_rich_country.idxmax()
+    highest_earning_country_percentage = round(percent_rich_country.max(), 1)
 
     # Identify the most popular occupation for those who earn >50K in India.
-    top_IN_occupation = df[(df['native-country'] == 'India') & (df['salary'] == '>50k')]['occupation'].value_counts().idmax()
+    top_IN_occupation = df[(df['native-country'] == 'India') & (df['salary'] == '>50K')]['occupation'].value_counts().idxmax()
 
     # DO NOT MODIFY BELOW THIS LINE
 
